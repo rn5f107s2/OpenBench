@@ -4,7 +4,7 @@
     "source"  : "https://github.com/rn5f107s2/Molybdenum",
 
     "build" : {
-        "path"      : "src",
+        "path"      : "",
         "compilers" : ["gcc"],
         "cpuflags"  : [],
         "systems"   : ["Linux"]
