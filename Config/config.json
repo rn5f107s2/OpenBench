@@ -1,6 +1,6 @@
 {
     "client_version"  : 23,
-    "client_repo_url" : "https://github.com/AndyGrant/OpenBench",
+    "client_repo_url" : "https://github.com/aytchell/OpenBench",
     "client_repo_ref" : "master",
 
     "use_cross_approval"          : false,
@@ -21,6 +21,7 @@
     ],
 
     "engines" : [
+        "Molybdenum",
         "4ku",
         "Berserk",
         "Bit-Genie",
