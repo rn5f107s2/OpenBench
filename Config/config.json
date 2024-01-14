@@ -24,6 +24,7 @@
 
     "engines" : [
         "Molybdenum",
+        "Molybdenum-gcc",
         "4ku",
         "Berserk",
         "Bit-Genie",
