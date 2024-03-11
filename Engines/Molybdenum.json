@@ -1,6 +1,6 @@
 {
     "private" : false,
-    "nps"     : 4500000,
+    "nps"     : 4000000,
     "source"  : "https://github.com/rn5f107s2/Molybdenum",
 
     "build" : {
@@ -33,6 +33,12 @@
             "workload_size"     : 32
         },
 
+        "MTC" : {
+            "both_options"      : "Threads=1 Hash=32",
+            "both_time_control" : "20.0+0.2",
+            "workload_size"     : 16
+        },
+
         "LTC" : {
             "both_options"      : "Threads=1 Hash=64",
             "both_time_control" : "40.0+0.40",
@@ -55,7 +61,7 @@
 
         "MTC" : {
             "dev_options"      : "Threads=1 Hash=32",
-            "dev_time_control" : "15.0+0.15"
+            "dev_time_control" : "20.0+0.2"
         },
 
         "LTC" : {
