@@ -18,6 +18,7 @@
 #                                                                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+
 import os
 import sys
 import tarfile
@@ -56,6 +57,7 @@ class PGNWatcher(threading.Thread):
             pgn.save()
 
     def run(self):
+        return
         while True:
             for pgn in PGN.objects.filter(processed=False):
                 try:
