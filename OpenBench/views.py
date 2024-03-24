@@ -50,6 +50,13 @@ from django.utils import timezone
 
 from wsgiref.util import FileWrapper
 
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+
+import socket
+
+import tempfile
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                              GENERAL UTILITIES                              #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -799,16 +806,89 @@ def client_submit_pgn(request, machine):
     with transaction.atomic():
 
         # Format: test.result.book-index.pgn.bz2
-        pgn            = PGN()
-        pgn.test_id    = int(request.POST['test_id']   )
-        pgn.result_id  = int(request.POST['result_id'] )
-        pgn.book_index = int(request.POST['book_index'])
+        pgn        = PGN()
+        testId     = pgn.test_id    = int(request.POST['test_id']   )
+        resultId   = pgn.result_id  = int(request.POST['result_id'] )
+        book_index = pgn.book_index = int(request.POST['book_index'])
         pgn.save()
 
         # Save the .pgn.bz2 to /Media/
-        FileSystemStorage().save(pgn.filename(), ContentFile(request.FILES['file'].read()))
+
+        # Original code
+        # FileSystemStorage().save(pgn.filename(), ContentFile(request.FILES['file'].read()))
+
+        prfx = "test" + str(testId) + "_"
+
+        tmp = tempfile.NamedTemporaryFile(suffix=".pgn.bz2", prefix=prfx)
+        tmp.write(request.FILES['file'].read())
+        tmp.flush()
+        uplaodPGNToDrive(str(testId), tmp.name)
+        tmp.close()
+
+
 
     return JsonResponse({})
+
+def uplaodPGNToDrive(testId, file):
+    gDriveCredentials = "CREDENTIALS.json"
+
+    credentials = service_account.Credentials.from_service_account_file(
+        gDriveCredentials,
+        scopes=["https://www.googleapis.com/auth/drive"]
+    )
+
+    drive_service = build('drive', 'v3', credentials=credentials)
+
+    folderName = "PGNs Test " + str(testId)
+
+    results = drive_service.files().list(
+        q=f"name='{folderName}' and mimeType='application/vnd.google-apps.folder'",
+        fields="files(id, name)"
+    ).execute()
+
+    folders = results.get('files', [])
+
+    folderId = None
+
+    # If the folder already exits return the id, else create the folder
+    if folders:
+        folderId = folders[0]['id']
+    else:
+        folder_metadata = {
+            "name": folderName,
+            "mimeType": "application/vnd.google-apps.folder",
+        }
+    
+        folder = drive_service.files().create(body=folder_metadata, fields="id").execute()
+
+        # Give write permission to whoever needs to see these PGNs
+        permission = {
+            "type": "user",
+            "role": "writer",
+            "emailAddress": "quiteweirdadress@gmail.com",
+        }
+        
+        drive_service.permissions().create(fileId=folder.get("id"), body=permission).execute()
+
+        folderId = folder.get("id")
+    
+    # When using a similar function to uplaod files to drive, this was necessary, not sure if it is here
+    timeout_value = 180
+    socket.setdefaulttimeout(timeout_value)
+
+    file_metadata = {
+        "name": os.path.basename(file), "parents": [folderId]
+    }
+
+    drive_service.files().create(
+        body=file_metadata,
+        media_body=file,
+        fields=""
+    ).execute()
+
+    socket.setdefaulttimeout(None)
+
+    
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                                                                             #
