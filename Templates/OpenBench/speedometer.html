@@ -1,0 +1,382 @@
+{% extends "OpenBench/base.html" %}
+
+{% load mytags %}
+
+{% block content %}
+
+<style>
+
+    :root {
+      --needleRotation: 0deg;
+      --lowerPercent: 10%;
+      --upperPercent: 10%;
+    }
+
+    .redDisplay {
+      height: 200px;
+      width: 200px;
+      margin-top: 25px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(left, darkred, darkred 50%, transparent 50%, transparent 100%);
+      outline: 20px solid grey;
+      position: absolute;
+    }
+
+    .greenDisplay {
+      height: 200px;
+      width: 200px;
+      margin-top: 25px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(right, darkgreen, darkgreen 50%, transparent 50%, transparent 100%);
+      outline: 20px solid grey;
+      position: absolute;
+    }
+
+    .smallMarker0 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(17deg);
+      position: absolute;
+    }
+
+    .smallMarker1 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(34deg);
+      position: absolute;
+    }
+
+    .smallMarker2 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(51deg);
+      position: absolute;
+    }
+
+    .smallMarker3 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(85deg);
+      position: absolute;
+    }
+
+    .smallMarker4 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom center;
+      transform: rotate(102deg);
+      position: absolute;
+    }
+
+    .smallMarker5 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(119deg);
+      position: absolute;
+    }
+
+    .smallMarkerNeg0 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(343deg);
+      position: absolute;
+    }
+
+    .smallMarkerNeg1 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(326deg);
+      position: absolute;
+    }
+
+    .smallMarkerNeg2 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(309deg);
+      position: absolute;
+    }
+
+    .smallMarkerNeg3 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(275deg);
+      position: absolute;
+    }
+
+    .smallMarkerNeg4 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(258deg);
+      position: absolute;
+    }
+
+    .smallMarkerNeg5 {
+      width: 3px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(top, grey, grey 22%, transparent 9%, transparent 100%);
+      transform-origin: bottom;
+      transform: rotate(241deg);
+      position: absolute;
+    }
+
+    .bigMarker0 {
+      width: 5px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background: grey;
+      position: absolute;
+    }
+
+    .bigMarker1 {
+      width: 5px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background: grey;
+      transform-origin: bottom center;
+      transform: rotate(68deg);
+      position: absolute;
+    }
+
+    .bigMarkerNeg1 {
+      width: 5px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background: grey;
+      transform-origin: bottom;
+      transform: rotate(293deg);
+      position: absolute;
+    }
+
+    .bigMarker2 {
+      width: 5px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background: grey;
+      transform-origin: bottom center;
+      transform: rotate(136deg);
+      position: absolute;
+    }
+
+    .bigMarkerNeg2 {
+      width: 5px; 
+      height: 120px;
+      margin-top: 5px;
+      margin-left: 123px;
+      display: inline-block;
+      background: grey;
+      transform-origin: bottom;
+      transform: rotate(224deg);
+      position: absolute;
+    }
+
+    .needle {
+      width: 0; 
+      height: 0; 
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 100px solid yellow;
+      margin-top: 25px;
+      margin-left: 120.5px;
+      background-color: transparent;
+      transform-origin: bottom;
+      transition: all 1s ease-in-out;
+      transform: rotate(var(--needleRotation));
+      display: inline-block;
+      position: absolute;
+    }
+
+    .needleHolder {
+      height: 35px;
+      width: 35px;
+      margin-top: 110px;
+      margin-left: 109px;
+      margin-right: 25px;
+      border-radius: 50%;
+      background-color: blue;
+      display: inline-block;
+      position: absolute;
+    }
+
+
+    /* https://stackoverflow.com/a/13059412 */
+
+    .coverGreen {
+        width: 150px;
+        height: 150px;
+        margin-top: 25px;
+        margin-left: 25px;
+        margin-right: 25px;
+        border-radius: 50%;
+        display: inline-block;
+        position: absolute;
+        border: solid 25px black;
+        transform: rotate(180deg) scaleX(-1);
+        position: absolute;
+        --mask: 
+            conic-gradient(red var(--upperPercent, 10%), transparent 0%);
+        -webkit-mask: var(--mask);
+            mask: var(--mask)
+    }
+
+    .coverRed {
+        width: 150px;
+        height: 150px;
+        margin-top: 25px;
+        margin-left: 25px;
+        margin-right: 25px;
+        border-radius: 50%;
+        border: solid 25px black;
+        transform: rotate(180deg);
+        display: inline-block;
+        position: absolute;
+        --mask: 
+            conic-gradient(red var(--lowerPercent, 10%), transparent 0%);
+        -webkit-mask: var(--mask);
+            mask: var(--mask)
+    }
+
+    .inner {
+      height: 151px;
+      width:  151px;
+      margin-top: 50px;
+      margin-left: 50px;
+      margin-right: 25px;
+      margin-bottom: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: black;
+      position: absolute;
+    }
+
+</style>
+
+<div class="workload-container" style="display: none;">
+    <pre class="speedometerStats" id="speedometerStats" style="display: none;">{{workload|speedometerStats}}</pre>
+</div>
+
+<script>
+    var r = document.querySelector(':root');
+
+    window.onload = function setSpeedometerStuff() {
+        console.log("call");
+
+        var argsSingle = document.getElementById('speedometerStats').innerHTML;
+        var argsAr = argsSingle.split("\n");
+        
+        console.log(argsAr[0]);
+        console.log(argsAr[1]);
+        console.log(argsAr[2]);
+        
+        var needleRotation = argsAr[0] + "deg";
+        var lowerPercent = argsAr[1] + "%";
+        var upperPercent = argsAr[2] + "%";
+
+        r.style.setProperty('--needleRotation', needleRotation);
+        r.style.setProperty('--lowerPercent', lowerPercent);
+        r.style.setProperty('--upperPercent', upperPercent);
+        var rs = getComputedStyle(r);
+        console.log( rs.getPropertyValue('--needleRotation'))
+    }
+</script>
+
+<div style="text-align:center;">
+    <div>
+        <div class="redDisplay"></div>
+        <div class="coverRed"></div>
+        <div class="greenDisplay"></div>
+        <div class="coverGreen"></div>
+        <div class="bigMarker0"></div>
+        <div class="bigMarker1"></div>
+        <div class="bigMarkerNeg1"></div>
+        <div class="bigMarker2"></div>
+        <div class="bigMarkerNeg2"></div>
+        <div class="smallMarker0"></div>
+        <div class="smallMarker1"></div>
+        <div class="smallMarker2"></div>
+        <div class="smallMarker3"></div>
+        <div class="smallMarker4"></div>
+        <div class="smallMarker5"></div>
+        <div class="smallMarkerNeg0"></div>
+        <div class="smallMarkerNeg1"></div>
+        <div class="smallMarkerNeg2"></div>
+        <div class="smallMarkerNeg3"></div>
+        <div class="smallMarkerNeg4"></div>
+        <div class="smallMarkerNeg5"></div>
+        <div class="inner"></div>
+        <div class="needle"></div>
+        <div class="needleHolder"></div>
+    </div>
+</div>
+
+{% endblock %}
