@@ -40,6 +40,7 @@ urlpatterns = [
 
     # Links for viewing general information tables
     django.urls.path(r'users/', OpenBench.views.users),
+    django.urls.path(r'speedometer/', OpenBench.views.speedometer),
     django.urls.path(r'event/<int:id>/', OpenBench.views.event),
     django.urls.path(r'events/', OpenBench.views.events_actions),
     django.urls.path(r'events/<int:page>/', OpenBench.views.events_actions),

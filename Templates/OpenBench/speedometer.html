@@ -1,0 +1,90 @@
+{% extends "OpenBench/base.html" %}
+
+{% block content %}
+
+<style>
+    .redDisplay {
+      height: 200px;
+      width: 200px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(left, red, red 50%, transparent 50%, transparent 100%);
+      outline: 20px solid grey;
+      position: absolute;
+    }
+
+    .greenDisplay {
+      height: 200px;
+      width: 200px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      background-image: -webkit-linear-gradient(right, green, green 50%, transparent 50%, transparent 100%);
+      outline: 20px solid grey;
+      position: absolute;
+    }
+
+    /* https://stackoverflow.com/a/13059412 */
+
+    .coverGreen {
+        width: 150px;
+        height: 150px;
+        margin-left: 25px;
+        margin-right: 25px;
+        border-radius: 50%;
+        display: inline-block;
+        position: absolute;
+        border: solid 25px black;
+        transform: rotate(180deg) scaleX(-1);
+        position: absolute;
+        --mask: 
+            conic-gradient(red var(--p, 15%), transparent 0%);
+        -webkit-mask: var(--mask);
+            mask: var(--mask)
+    }
+
+    .coverRed {
+        width: 150px;
+        height: 150px;
+        margin-left: 25px;
+        margin-right: 25px;
+        border-radius: 50%;
+        border: solid 25px black;
+        transform: rotate(180deg);
+        display: inline-block;
+        position: absolute;
+        --mask: 
+            conic-gradient(red var(--p, 15%), transparent 0%);
+        -webkit-mask: var(--mask);
+            mask: var(--mask)
+    }
+
+    .inner {
+      height: 151px;
+      width:  151px;
+      margin-left: 49px;
+      margin-right: 25px;
+      margin-top: 25px;
+      margin-bottom: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: black;
+      position: absolute;
+    }
+
+</style>
+
+<div style="text-align:center;">
+    <div>
+        <div class="redDisplay"></div>
+        <div class="coverRed"></div>
+        <div class="greenDisplay"></div>
+        <div class="coverGreen"></div>
+        <div class="inner"></div>
+    </div>
+</div>
+
+{% endblock %}

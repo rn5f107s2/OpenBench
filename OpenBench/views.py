@@ -435,6 +435,9 @@ def event(request, id):
     except:
         return redirect(request, '/index/', error='No logs for event exist')
 
+def speedometer(request): 
+    return render(request, 'speedometer.html')
+
 def events_actions(request, page=1):
 
     events = LogEvent.objects.all().filter(machine_id=0).order_by('-id')
