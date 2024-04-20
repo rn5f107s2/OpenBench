@@ -57,6 +57,24 @@ def view_workload(request, workload, workload_type):
 
     return OpenBench.views.render(request, 'workload.html', data)
 
+def view_speedometer(request, workload, workload_type, darkreader, colors = []):
+    assert workload_type in ['TEST']
+
+    data = {
+        'workload'   : workload,
+        'results'    : [],
+        'darkreader' : darkreader,
+        'colors'     : colors,
+    }
+
+    for result in Result.objects.filter(test=workload):
+        data['results'].append({ 'data' : result, 'active' : is_active(result) })
+
+    data['type']            = workload_type
+    data['dev_text']        = 'Dev'
+
+    return OpenBench.views.render(request, 'speedometer.html', data)
+
 def is_active(result):
 
     # One minute prior to now
