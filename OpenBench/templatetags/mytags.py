@@ -114,6 +114,46 @@ def longStatBlock(test):
 
     return '\n'.join(lines)
 
+def speedometerStats(test):
+    maxElo = 10
+    minElo = -10
+
+    # Note the actual max this value can be is 144 142 is just for style
+    maxRotation = 142
+
+    lines = []
+
+    lower, elo, upper = OpenBench.stats.ELO([test.losses, test.draws, test.wins])
+
+    if elo == 0:
+        lines.append("0")
+    elif elo > 0:
+        percentage = min(elo, maxElo) / maxElo
+        lines.append(str(percentage * maxRotation))
+    else :
+        percentage = abs(max(elo, minElo) / minElo)
+        lines.append(str(360 - percentage * maxRotation))
+
+    error = max(upper - elo, elo - lower)
+    lower = elo - error
+    upper = elo + error
+
+    eloSpan = abs(minElo) + abs(maxElo)
+    lowerPc = min(max(lower / eloSpan, -1), 1) * 0.9
+    upperPc = min(max(upper / eloSpan, -1), 1) * 0.9
+
+    print("HERE")
+    print(lower)
+    print(lowerPc)
+    print(upper)
+    print(upperPc)
+
+    lines.append(str(round(min(lowerPc + 1, 1.8) * 100)))
+    lines.append(str(round(min(1 - upperPc, 1.8) * 100)))
+
+    return '\n'.join(lines)
+
+
 def testResultColour(test):
 
     if test.passed:
@@ -207,6 +247,7 @@ register.filter('twoDigitPrecision', twoDigitPrecision)
 register.filter('gitDiffLink', gitDiffLink)
 register.filter('shortStatBlock', shortStatBlock)
 register.filter('longStatBlock', longStatBlock)
+register.filter('speedometerStats', speedometerStats)
 register.filter('testResultColour', testResultColour)
 register.filter('sumAttributes', sumAttributes)
 register.filter('insertCommas', insertCommas)

@@ -1,8 +1,17 @@
 {% extends "OpenBench/base.html" %}
 
+{% load mytags %}
+
 {% block content %}
 
 <style>
+
+    :root {
+      --needleRotation: 0deg;
+      --lowerPercent: 10%;
+      --upperPercent: 10%;
+    }
+
     .redDisplay {
       height: 200px;
       width: 200px;
@@ -241,7 +250,8 @@
       margin-left: 120.5px;
       background-color: transparent;
       transform-origin: bottom;
-      transform: rotate(45deg);
+      transition: all 1s ease-in-out;
+      transform: rotate(var(--needleRotation));
       display: inline-block;
       position: absolute;
     }
@@ -274,7 +284,7 @@
         transform: rotate(180deg) scaleX(-1);
         position: absolute;
         --mask: 
-            conic-gradient(red var(--p, 10%), transparent 0%);
+            conic-gradient(red var(--upperPercent, 10%), transparent 0%);
         -webkit-mask: var(--mask);
             mask: var(--mask)
     }
@@ -291,7 +301,7 @@
         display: inline-block;
         position: absolute;
         --mask: 
-            conic-gradient(red var(--p, 10%), transparent 0%);
+            conic-gradient(red var(--lowerPercent, 10%), transparent 0%);
         -webkit-mask: var(--mask);
             mask: var(--mask)
     }
@@ -310,6 +320,35 @@
     }
 
 </style>
+
+<div class="workload-container" style="display: none;">
+    <pre class="speedometerStats" id="speedometerStats" style="display: none;">{{workload|speedometerStats}}</pre>
+</div>
+
+<script>
+    var r = document.querySelector(':root');
+
+    window.onload = function setSpeedometerStuff() {
+        console.log("call");
+
+        var argsSingle = document.getElementById('speedometerStats').innerHTML;
+        var argsAr = argsSingle.split("\n");
+        
+        console.log(argsAr[0]);
+        console.log(argsAr[1]);
+        console.log(argsAr[2]);
+        
+        var needleRotation = argsAr[0] + "deg";
+        var lowerPercent = argsAr[1] + "%";
+        var upperPercent = argsAr[2] + "%";
+
+        r.style.setProperty('--needleRotation', needleRotation);
+        r.style.setProperty('--lowerPercent', lowerPercent);
+        r.style.setProperty('--upperPercent', upperPercent);
+        var rs = getComputedStyle(r);
+        console.log( rs.getPropertyValue('--needleRotation'))
+    }
+</script>
 
 <div style="text-align:center;">
     <div>
