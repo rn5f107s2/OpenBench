@@ -132,15 +132,15 @@ def speedometerStats(test):
         lines.append(str(percentage * maxRotation))
     else :
         percentage = abs(max(elo, minElo) / minElo)
-        lines.append(str(360 - percentage * maxRotation))
+        lines.append(str(percentage * -maxRotation))
 
     error = max(upper - elo, elo - lower)
     lower = elo - error
     upper = elo + error
 
     eloSpan = abs(minElo) + abs(maxElo)
-    lowerPc = min(max(lower / eloSpan, -1), 1) * 0.9
-    upperPc = min(max(upper / eloSpan, -1), 1) * 0.9
+    lowerPc = min(max(lower / eloSpan, -1), 1) * 0.45
+    upperPc = min(max(upper / eloSpan, -1), 1) * 0.45
 
     print("HERE")
     print(lower)
@@ -148,8 +148,8 @@ def speedometerStats(test):
     print(upper)
     print(upperPc)
 
-    lines.append(str(round(min(lowerPc + 1, 1.8) * 100)))
-    lines.append(str(round(min(1 - upperPc, 1.8) * 100)))
+    lines.append(str(round(min(lowerPc + 0.55, 0.9) * 100)))
+    lines.append(str(round(min(0.55 - upperPc, 0.9) * 100)))
 
     return '\n'.join(lines)
 
