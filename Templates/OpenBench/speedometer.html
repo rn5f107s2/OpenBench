@@ -10,7 +10,7 @@
       --needleRotation: 0deg;
       --lowerPercent: 10%;
       --upperPercent: 10%;
-      --eloAlignment: 605px;
+      --eloAlignment: 105px;
     }
 
     .colorDisplay {
@@ -323,7 +323,8 @@
       color: #bebebe;
       font-family: sans-serif;
       font-size: 22px;
-      margin-left: 608px;
+      display: inline-block;
+      margin-left: 108px;
       margin-top: 75px;
       position: absolute;
     }
@@ -332,7 +333,8 @@
       color: #bebebe;
       font-family: sans-serif;
       font-size: 20px;
-      margin-left: var(--eloAlignment, 605px);
+      display: inline-block;
+      margin-left: var(--eloAlignment);
       margin-top: 180px;
       position: absolute;
     }
@@ -353,10 +355,10 @@
         var needleRotation = argsAr[0] + "deg";
         var lowerPercent = argsAr[1] + "%";
         var upperPercent = argsAr[2] + "%";
-        var eloAlignment = "605px";
+        var eloAlignment = "105px";
 
         if (argsAr[0] < 0) {
-          eloAlignment = "600px";
+          eloAlignment = "100px";
         }
 
         r.style.setProperty('--needleRotation', needleRotation);
