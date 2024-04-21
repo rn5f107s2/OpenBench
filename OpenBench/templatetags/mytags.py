@@ -114,11 +114,21 @@ def longStatBlock(test):
 
     return '\n'.join(lines)
 
+def tinyStatBlock(test):
+    lower, elo, upper = OpenBench.stats.ELO([test.losses, test.draws, test.wins])
+    error = max(upper - elo, elo - lower)
+
+    lengthLimit = 4 if elo >= 0 else 5
+    eloStr   = "" + str(elo)[:lengthLimit] + "\n"
+
+    return eloStr
+
+
 def speedometerStats(test):
     maxElo = 10
-    minElo = -10
+    minElo = -maxElo
 
-    # Note the actual max this value can be is 144 142 is just for style
+    # Note the actual max this value can be is 144, 142 is just for style
     maxRotation = 142
 
     lines = []
@@ -134,19 +144,15 @@ def speedometerStats(test):
         percentage = abs(max(elo, minElo) / minElo)
         lines.append(str(percentage * -maxRotation))
 
+    # percentage = (min(max(elo, minElo), maxElo) / maxElo) * maxRotation
+    # lines.append(str(percentage))
+
     error = max(upper - elo, elo - lower)
     lower = elo - error
     upper = elo + error
 
-    eloSpan = abs(minElo) + abs(maxElo)
-    lowerPc = min(max(lower / eloSpan, -1), 1) * 0.45
-    upperPc = min(max(upper / eloSpan, -1), 1) * 0.45
-
-    print("HERE")
-    print(lower)
-    print(lowerPc)
-    print(upper)
-    print(upperPc)
+    lowerPc = min(max(lower / abs(minElo), -1), 1) * 0.45
+    upperPc = min(max(upper / abs(maxElo), -1), 1) * 0.45
 
     lines.append(str(round(min(lowerPc + 0.55, 0.9) * 100)))
     lines.append(str(round(min(0.55 - upperPc, 0.9) * 100)))
@@ -247,6 +253,7 @@ register.filter('twoDigitPrecision', twoDigitPrecision)
 register.filter('gitDiffLink', gitDiffLink)
 register.filter('shortStatBlock', shortStatBlock)
 register.filter('longStatBlock', longStatBlock)
+register.filter('tinyStatBlock', tinyStatBlock)
 register.filter('speedometerStats', speedometerStats)
 register.filter('testResultColour', testResultColour)
 register.filter('sumAttributes', sumAttributes)
