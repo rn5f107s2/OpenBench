@@ -119,6 +119,10 @@ def tinyStatBlock(test):
     error = max(upper - elo, elo - lower)
 
     lengthLimit = 4 if elo >= 0 else 5
+
+    if abs(elo) >= 100:
+        lengthLimit = lengthLimit - 1
+    
     eloStr   = "" + str(elo)[:lengthLimit] + "\n"
 
     return eloStr
