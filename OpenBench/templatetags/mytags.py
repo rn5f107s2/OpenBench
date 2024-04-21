@@ -116,9 +116,9 @@ def longStatBlock(test):
 
 def speedometerStats(test):
     maxElo = 10
-    minElo = -10
+    minElo = -maxElo
 
-    # Note the actual max this value can be is 144 142 is just for style
+    # Note the actual max this value can be is 144, 142 is just for style
     maxRotation = 142
 
     lines = []
@@ -138,15 +138,7 @@ def speedometerStats(test):
     lower = elo - error
     upper = elo + error
 
-    eloSpan = abs(minElo) + abs(maxElo)
-    lowerPc = min(max(lower / eloSpan, -1), 1) * 0.45
-    upperPc = min(max(upper / eloSpan, -1), 1) * 0.45
-
-    print("HERE")
-    print(lower)
-    print(lowerPc)
-    print(upper)
-    print(upperPc)
+    lowerPc = min(max(lower / abs(minElo), -1), 1) * 0.45
 
     lines.append(str(round(min(lowerPc + 0.55, 0.9) * 100)))
     lines.append(str(round(min(0.55 - upperPc, 0.9) * 100)))
