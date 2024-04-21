@@ -139,6 +139,7 @@ def speedometerStats(test):
     upper = elo + error
 
     lowerPc = min(max(lower / abs(minElo), -1), 1) * 0.45
+    upperPc = min(max(upper / abs(maxElo), -1), 1) * 0.45
 
     lines.append(str(round(min(lowerPc + 0.55, 0.9) * 100)))
     lines.append(str(round(min(0.55 - upperPc, 0.9) * 100)))
