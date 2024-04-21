@@ -114,6 +114,16 @@ def longStatBlock(test):
 
     return '\n'.join(lines)
 
+def tinyStatBlock(test):
+    lower, elo, upper = OpenBench.stats.ELO([test.losses, test.draws, test.wins])
+    error = max(upper - elo, elo - lower)
+
+    lengthLimit = 4 if elo >= 0 else 5
+    eloStr   = "" + str(elo)[:lengthLimit] + "\n"
+
+    return eloStr
+
+
 def speedometerStats(test):
     maxElo = 10
     minElo = -maxElo
@@ -133,6 +143,9 @@ def speedometerStats(test):
     else :
         percentage = abs(max(elo, minElo) / minElo)
         lines.append(str(percentage * -maxRotation))
+
+    # percentage = (min(max(elo, minElo), maxElo) / maxElo) * maxRotation
+    # lines.append(str(percentage))
 
     error = max(upper - elo, elo - lower)
     lower = elo - error
@@ -240,6 +253,7 @@ register.filter('twoDigitPrecision', twoDigitPrecision)
 register.filter('gitDiffLink', gitDiffLink)
 register.filter('shortStatBlock', shortStatBlock)
 register.filter('longStatBlock', longStatBlock)
+register.filter('tinyStatBlock', tinyStatBlock)
 register.filter('speedometerStats', speedometerStats)
 register.filter('testResultColour', testResultColour)
 register.filter('sumAttributes', sumAttributes)
