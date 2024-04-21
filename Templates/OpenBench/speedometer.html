@@ -348,14 +348,8 @@
     var r = document.querySelector(':root');
 
     window.onload = function setSpeedometerStuff() {
-        console.log("call");
-
         var argsSingle = document.getElementById('speedometerStats').innerHTML;
         var argsAr = argsSingle.split("\n");
-        
-        console.log(argsAr[0]);
-        console.log(argsAr[1]);
-        console.log(argsAr[2]);
         
         var needleRotation = argsAr[0] + "deg";
         var lowerPercent = argsAr[1] + "%";
@@ -371,8 +365,6 @@
         r.style.setProperty('--upperPercent', upperPercent);
         r.style.setProperty('--eloAlignment', eloAlignment);
         var rs = getComputedStyle(r);
-        console.log( rs.getPropertyValue('--needleRotation'))
-        console.log( rs.getPropertyValue('--eloAlignment'))
     }
 </script>
 
