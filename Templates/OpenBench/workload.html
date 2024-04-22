@@ -121,16 +121,17 @@
             </div>
         {% endif %}
 
-        {% if type == "TEST" %}
-            <div class="anchor-container">
-                <a class="mt-1 anchorbutton btn-blue" href="../../speedometer/{{workload.id}}">View Speedometer</a>
-            </div>
-        {% endif %}
-
         <!-- PGN Download Button -->
         {% if workload.upload_pgns != "FALSE" %}
             <div class="anchor-container">
                 <a class="mt-1 anchorbutton btn-blue" href="/api/pgns/{{workload.id}}/">Download PGN Archive</a>
+            </div>
+        {% endif %}
+
+        <!-- View Speedometer Button-->
+        {% if type == "TEST" %}
+            <div class="anchor-container">
+                <a class="mt-1 anchorbutton btn-blue" href="../../speedometer/{{workload.id}}">View Speedometer</a>
             </div>
         {% endif %}
 
