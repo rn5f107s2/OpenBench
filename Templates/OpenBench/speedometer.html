@@ -7,10 +7,30 @@
 <style>
 
     :root {
-      --needleRotation: 0deg;
+      --eloNeedleRotation: 0deg;
+      --llrNeedleRotation: 0deg;
       --lowerPercent: 10%;
       --upperPercent: 10%;
       --eloAlignment: 105px;
+      --llrAlignment: 105px;
+    }
+
+    .orangeDisplay {
+      width: 150px;
+      height: 150px;
+      margin-top: 25px;
+      margin-left: 25px;
+      margin-right: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      position: absolute;
+      border: solid 25px #BB4400;
+      transform: rotate(-136deg);
+      position: absolute;
+      --mask: 
+          conic-gradient(red 75%, transparent 0%);
+      -webkit-mask: var(--mask);
+          mask: var(--mask)
     }
 
     .colorDisplay {
@@ -38,7 +58,7 @@
       position: absolute;
     }
 
-    .smallMarker0 {
+    .smallMarker {
       width: 3px; 
       height: 120px;
       margin-top: 5px;
@@ -46,153 +66,11 @@
       display: inline-block;
       background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
       transform-origin: bottom;
-      transform: rotate(17deg);
+      transform: rotate(var(--rotation));
       position: absolute;
     }
 
-    .smallMarker1 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(34deg);
-      position: absolute;
-    }
-
-    .smallMarker2 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(51deg);
-      position: absolute;
-    }
-
-    .smallMarker3 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(85deg);
-      position: absolute;
-    }
-
-    .smallMarker4 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom center;
-      transform: rotate(102deg);
-      position: absolute;
-    }
-
-    .smallMarker5 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5.5px;
-      margin-left: 123px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(119deg);
-      position: absolute;
-    }
-
-    .smallMarkerNeg0 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123.5px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(343deg);
-      position: absolute;
-    }
-
-    .smallMarkerNeg1 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123.5px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(326deg);
-      position: absolute;
-    }
-
-    .smallMarkerNeg2 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123.5px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(309deg);
-      position: absolute;
-    }
-
-    .smallMarkerNeg3 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123.5px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(275deg);
-      position: absolute;
-    }
-
-    .smallMarkerNeg4 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123.5px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(258deg);
-      position: absolute;
-    }
-
-    .smallMarkerNeg5 {
-      width: 3px; 
-      height: 120px;
-      margin-top: 5px;
-      margin-left: 123.5px;
-      display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
-      transform-origin: bottom;
-      transform: rotate(241deg);
-      position: absolute;
-    }
-
-    .bigMarker0 {
-      width: 5px; 
-      height: 119px;
-      margin-top: 5px;
-      margin-left: 122px;
-      display: inline-block;
-      background: #ccb8b8;
-      position: absolute;
-    }
-
-    .bigMarker1 {
+    .bigMarker {
       width: 5px; 
       height: 119px;
       margin-top: 5px;
@@ -200,47 +78,11 @@
       display: inline-block;
       background: #ccb8b8;
       transform-origin: bottom center;
-      transform: rotate(68deg);
+      transform: rotate(var(--rotation));
       position: absolute;
     }
 
-    .bigMarkerNeg1 {
-      width: 5px; 
-      height: 119px;
-      margin-top: 5px;
-      margin-left: 122.5px;
-      display: inline-block;
-      background: #ccb8b8;
-      transform-origin: bottom;
-      transform: rotate(293deg);
-      position: absolute;
-    }
-
-    .bigMarker2 {
-      width: 5px; 
-      height: 119px;
-      margin-top: 5px;
-      margin-left: 122.5px;
-      display: inline-block;
-      background: #ccb8b8;
-      transform-origin: bottom center;
-      transform: rotate(136deg);
-      position: absolute;
-    }
-
-    .bigMarkerNeg2 {
-      width: 5px; 
-      height: 119px;
-      margin-top: 5px;
-      margin-left: 122.5px;
-      display: inline-block;
-      background: #ccb8b8;
-      transform-origin: bottom;
-      transform: rotate(224deg);
-      position: absolute;
-    }
-
-    .needle {
+    .eloNeedle {
       width: 0; 
       height: 0; 
       border-left: 5px solid transparent;
@@ -252,7 +94,24 @@
       background-color: transparent;
       transform-origin: bottom;
       transition: all 1s ease-in-out;
-      transform: rotate(var(--needleRotation));
+      transform: rotate(var(--eloNeedleRotation));
+      display: inline-block;
+      position: absolute;
+    }
+
+    .llrNeedle {
+      width: 0; 
+      height: 0; 
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 100px solid #FFAE03;
+      opacity: 80%;
+      margin-top: 25px;
+      margin-left: 120.5px;
+      background-color: transparent;
+      transform-origin: bottom;
+      transition: all 1s ease-in-out;
+      transform: rotate(var(--llrNeedleRotation));
       display: inline-block;
       position: absolute;
     }
@@ -339,6 +198,16 @@
       position: absolute;
     }
 
+    .llrValueInscription {
+      color: #bebebe;
+      font-family: sans-serif;
+      font-size: 20px;
+      display: inline-block;
+      margin-left: var(--llrAlignment);
+      margin-top: 180px;
+      position: absolute;
+    }
+
 </style>
 
 <div class="workload-container" style="display: none;">
@@ -352,52 +221,90 @@
         var argsSingle = document.getElementById('speedometerStats').innerHTML;
         var argsAr = argsSingle.split("\n");
         
-        var needleRotation = argsAr[0] + "deg";
+        var eloNeedleRotation = argsAr[0] + "deg";
+        var llrNeedleRotation = argsAr[3] + "deg";
         var lowerPercent = argsAr[1] + "%";
         var upperPercent = argsAr[2] + "%";
         var eloAlignment = "105px";
+        var llrAlignment = "105px"
 
         if (argsAr[0] < 0) {
           eloAlignment = "100px";
         }
 
-        r.style.setProperty('--needleRotation', needleRotation);
+        if (argsAr[3] < 0) {
+          llrAlignment = "100px";
+        }
+
+        r.style.setProperty('--eloNeedleRotation', eloNeedleRotation);
+        r.style.setProperty('--llrNeedleRotation', llrNeedleRotation);
         r.style.setProperty('--lowerPercent', lowerPercent);
         r.style.setProperty('--upperPercent', upperPercent);
         r.style.setProperty('--eloAlignment', eloAlignment);
+        r.style.setProperty('--llrAlignment', llrAlignment);
         var rs = getComputedStyle(r);
     }
 </script>
 
-<div style="text-align:center;">
-    <div>
+<div style="text-align: center;">
+    <div style="position: relative; min-width: 280px; min-height: 280px;">
         <div class="colorDisplay"></div>
+        <div class="orangeDisplay"></div>
         <div class="coverRed"></div>
         <div class="coverGreen"></div>
-        <div class="bigMarker0"></div>
-        <div class="bigMarker1"></div>
-        <div class="bigMarkerNeg1"></div>
-        <div class="bigMarker2"></div>
-        <div class="bigMarkerNeg2"></div>
-        <div class="smallMarker0"></div>
-        <div class="smallMarker1"></div>
-        <div class="smallMarker2"></div>
-        <div class="smallMarker3"></div>
-        <div class="smallMarker4"></div>
-        <div class="smallMarker5"></div>
-        <div class="smallMarkerNeg0"></div>
-        <div class="smallMarkerNeg1"></div>
-        <div class="smallMarkerNeg2"></div>
-        <div class="smallMarkerNeg3"></div>
-        <div class="smallMarkerNeg4"></div>
-        <div class="smallMarkerNeg5"></div>
+        <div style="--rotation: 0deg" class="bigMarker"></div>
+        <div style="--rotation: 68deg" class="bigMarker"></div>
+        <div style="--rotation: 136deg" class="bigMarker"></div>
+        <div style="--rotation: 293deg" class="bigMarker"></div>
+        <div style="--rotation: 224deg" class="bigMarker"></div>
+        <div style="--rotation: 17deg" class="smallMarker"></div>
+        <div style="--rotation: 34deg" class="smallMarker"></div>
+        <div style="--rotation: 51deg" class="smallMarker"></div>
+        <div style="--rotation: 85deg" class="smallMarker"></div>
+        <div style="--rotation: 102deg" class="smallMarker"></div>
+        <div style="--rotation: 119deg" class="smallMarker"></div>
+        <div style="--rotation: 343deg" class="smallMarker"></div>
+        <div style="--rotation: 326deg" class="smallMarker"></div>
+        <div style="--rotation: 309deg" class="smallMarker"></div>
+        <div style="--rotation: 275deg" class="smallMarker"></div>
+        <div style="--rotation: 258deg" class="smallMarker"></div>
+        <div style="--rotation: 241deg" class="smallMarker"></div>
         <div class="inner"></div>
         <div class="displayOutline"></div>
-        <div class="eloInscription">Elo</div>
-        <div class="eloValueInscription">{{workload|tinyStatBlock|linebreaksbr}}</div>
-        <div class="needle"></div>
+        <div class="eloInscription">LLR</div>
+        <div class="llrValueInscription">{{workload|llrBlock|linebreaksbr}}</div>
+        <div class="llrNeedle"></div>
         <div class="needleHolder"></div>
     </div>
+
+    <div style="position: relative;">
+      <div class="colorDisplay"></div>
+      <div class="coverRed"></div>
+      <div class="coverGreen"></div>
+      <div style="--rotation: 0deg" class="bigMarker"></div>
+      <div style="--rotation: 68deg" class="bigMarker"></div>
+      <div style="--rotation: 136deg" class="bigMarker"></div>
+      <div style="--rotation: 293deg" class="bigMarker"></div>
+      <div style="--rotation: 224deg" class="bigMarker"></div>
+      <div style="--rotation: 17deg" class="smallMarker"></div>
+      <div style="--rotation: 34deg" class="smallMarker"></div>
+      <div style="--rotation: 51deg" class="smallMarker"></div>
+      <div style="--rotation: 85deg" class="smallMarker"></div>
+      <div style="--rotation: 102deg" class="smallMarker"></div>
+      <div style="--rotation: 119deg" class="smallMarker"></div>
+      <div style="--rotation: 343deg" class="smallMarker"></div>
+      <div style="--rotation: 326deg" class="smallMarker"></div>
+      <div style="--rotation: 309deg" class="smallMarker"></div>
+      <div style="--rotation: 275deg" class="smallMarker"></div>
+      <div style="--rotation: 258deg" class="smallMarker"></div>
+      <div style="--rotation: 241deg" class="smallMarker"></div>
+      <div class="inner"></div>
+      <div class="displayOutline"></div>
+      <div class="eloInscription">Elo</div>
+      <div class="eloValueInscription">{{workload|tinyStatBlock|linebreaksbr}}</div>
+      <div class="eloNeedle"></div>
+      <div class="needleHolder"></div>
+  </div>
 </div>
 
 {% endblock %}
