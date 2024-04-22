@@ -177,7 +177,7 @@ def speedometerStats(test):
         percentage = llr / test.upperllr
         lines.append(str(min(percentage * maxRotation, rotationLimit)))
     else :
-        percentage = abs(llr) / test.lowerllr
+        percentage = llr / test.lowerllr
         lines.append(str(max(percentage * -maxRotation, -rotationLimit)))
 
     return '\n'.join(lines)
