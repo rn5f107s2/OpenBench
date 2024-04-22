@@ -132,13 +132,30 @@ def llrBlock(test):
 
 
 def speedometerStats(test):
-    maxElo = 10
+    # start settings
+
+    # maxElo is the elo value of the most positive big marker on the speedometer, 
+    # default max(max(abs(test.eloupper), abs(test.elolower)) * 2, 4)
+    # (test.elo[lower/upper] correspond to elo0 / elo1 (SPRT bounds))
+    maxElo = max(max(abs(test.eloupper), abs(test.elolower)) * 2, 4)
+
+    # minElo is the elo value of the most negative big marker on the speedometer,
+    # (note: while having minElo = -maxElo feels natural, its not strictly necessary, 
+    # when considering this, keep in mind that zero will always be in the middle, 
+    # so either value set to zero will lead to weird behaviour, 
+    # having min and max be the same sign might also lead  to weird behaviour), default -maxElo
+    # , default -maxElo
     minElo = -maxElo
 
-    # Note the actual limit of this value is 144, 142 is just for style
+    # The furthest the needle will ever rotate in any (positive / negative) direction in degree,
+    # default 142
     rotationLimit = 142
-    # The rotation that corresponds to maxElo
+
+    # The rotation of the needle in degree that corresponds to maxElo, default 136
+    # (this is the position of the last big marker)
     maxRotation   = 136
+
+    # end settings
 
     lines = []
 
@@ -148,15 +165,11 @@ def speedometerStats(test):
     if elo == 0:
         lines.append("0")
     elif elo > 0:
-        percentage = min(elo, maxElo) / maxElo
+        percentage = elo / maxElo
         lines.append(str(min(percentage * maxRotation, rotationLimit)))
     else :
-        percentage = abs(max(elo, minElo) / minElo)
-        lines.append(str(max(percentage * -maxRotation, -rotationLimit)))
-
-    # should work for minElo = -maxElo
-    # percentage = (min(max(elo, minElo), maxElo) / maxElo) * maxRotation
-    # lines.append(str(percentage))
+        percentage = abs(elo) / minElo
+        lines.append(str(max(percentage * maxRotation, -rotationLimit)))
 
     error = max(upper - elo, elo - lower)
     lower = elo - error
