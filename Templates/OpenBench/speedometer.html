@@ -7,6 +7,52 @@
 <style>
 
     :root {
+      /* start settings */
+
+      /* Color of the Elo / LLR needle, default #FFAE03 */
+      --needleColor: #FFAE03;
+
+      /* Opacity of needle, default 80% */
+      --needleOpacity: 80%;
+
+      /* Duration of the needles animation, default 1s */
+      --needleAnimationDuration: 1s;
+
+      /* Color of the needle holder (circle in the middle), default #006494  */
+      --needleHolderColor: #006494;
+
+      /* Color of the negative Elo display side, default darkred */
+      --negEloColor: darkred;
+
+      /* Color of the positive Elo display side, default darkgreen */
+      --posEloColor: darkgreen;
+
+      /* Color of the middle of the LLR speedometer, default #BB4400 */
+      --llrDisplayColor: #BB4400;
+
+      /* Color of the small markers, default #ccb8b8 */
+      --smallMarkerColor: #ccb8b8;
+
+      /* Color of the big markers, default #ccb8b8 */
+      --bigMarkerColor: #ccb8b8;
+
+      /* Color of the "Elo" / "LLR" writing (the thing on the top), default #ccb8b8 */
+      --letterColor: #ccb8b8;
+
+      /* Color of the elo / llr values (the thing on the bottom), default #ccb8b8 */
+      --valueColor: #ccb8b8;
+
+      /* Color of the background, default black */
+      --backgroundColor: black;
+
+      /* Color of the display outline (note the default width is one, its barely visible), default white*/
+      --outlineColor: white;
+
+      /* Width of the outline (), default 1px */
+      --outlineWidth: 1px;
+
+      /* end settings */
+
       --eloNeedleRotation: 0deg;
       --llrNeedleRotation: 0deg;
       --lowerPercent: 10%;
@@ -24,7 +70,7 @@
       border-radius: 50%;
       display: inline-block;
       position: absolute;
-      border: solid 25px #BB4400;
+      border: solid 25px var(--llrDisplayColor, #BB4400);
       transform: rotate(-136deg);
       position: absolute;
       --mask: 
@@ -41,7 +87,8 @@
       margin-right: 25px;
       border-radius: 50%;
       display: inline-block;
-      background-image: -webkit-linear-gradient(left, darkred, darkred 50%, darkgreen 50%, darkgreen 100%);
+      background-image: -webkit-linear-gradient(left, var(--negEloColor, darkred), var(--negEloColor, darkred) 50%, 
+                                                      var(--posEloColor, darkgreen) 50%, var(--posEloColor, darkgreen) 100%);
       position: absolute;
     }
 
@@ -54,7 +101,7 @@
       border-radius: 50%;
       display: inline-block;
       background-image: radial-gradient(transparent 56%, grey 56%, black 56%, grey 72%, transparent 72%);
-      outline: 1px solid white;
+      outline: var(--outlineWidth) solid var(--outlineColor, white);
       position: absolute;
     }
 
@@ -64,7 +111,7 @@
       margin-top: 5px;
       margin-left: 123px;
       display: inline-block;
-      background-image: -webkit-linear-gradient(top, #ccb8b8, #ccb8b8 22%, transparent 9%, transparent 100%);
+      background-image: -webkit-linear-gradient(top, var(--smallMarkerColor, #ccb8b8), var(--smallMarkerColor, #ccb8b8) 22%, transparent 9%, transparent 100%);
       transform-origin: bottom;
       transform: rotate(var(--rotation));
       position: absolute;
@@ -76,7 +123,7 @@
       margin-top: 5px;
       margin-left: 122.5px;
       display: inline-block;
-      background: #ccb8b8;
+      background: var(--bigMarkerColor, #ccb8b8);
       transform-origin: bottom center;
       transform: rotate(var(--rotation));
       position: absolute;
@@ -88,12 +135,12 @@
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-bottom: 100px solid var(--needleColor, #FFAE03);
-      opacity: 80%;
+      opacity: var(--needleOpacity, 80%);
       margin-top: 25px;
       margin-left: 120.5px;
       background-color: transparent;
       transform-origin: bottom;
-      transition: all 1s ease-in-out;
+      transition: all var(--needleAnimationDuration, 1s) ease-in-out;
       display: inline-block;
       position: absolute;
     }
@@ -127,7 +174,7 @@
         border-radius: 50%;
         display: inline-block;
         position: absolute;
-        border: solid 25px black;
+        border: solid 25px var(--backgroundColor, black);
         position: absolute;
         -webkit-mask: var(--mask);
             mask: var(--mask)
@@ -163,12 +210,12 @@
       margin-right: 25px;
       border-radius: 50%;
       display: inline-block;
-      background-color: black;
+      background-color: var(--backgroundColor, black);
       position: absolute;
     }
 
     .eloInscription {
-      color: #bebebe;
+      color: var(--letterColor, #ccb8b8);
       font-family: sans-serif;
       font-size: 22px;
       display: inline-block;
@@ -178,7 +225,7 @@
     }
 
     .eloValueInscription, .llrValueInscription {
-      color: #bebebe;
+      color: var(--valueColor, #ccb8b8);
       font-family: sans-serif;
       font-size: 20px;
       display: inline-block;
