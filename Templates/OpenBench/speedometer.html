@@ -166,6 +166,40 @@
             mask: var(--mask)
     }
 
+    .coverGreenLLR {
+        width: 150px;
+        height: 150px;
+        margin-top: 25px;
+        margin-left: 25px;
+        margin-right: 25px;
+        border-radius: 50%;
+        border: solid 25px black;
+        transform: rotate(180deg) scaleX(-1);
+        display: inline-block;
+        position: absolute;
+        --mask: 
+            conic-gradient(red 10%, transparent 0%);
+        -webkit-mask: var(--mask);
+            mask: var(--mask)
+    }
+
+    .coverRedLLR {
+        width: 150px;
+        height: 150px;
+        margin-top: 25px;
+        margin-left: 25px;
+        margin-right: 25px;
+        border-radius: 50%;
+        border: solid 25px black;
+        transform: rotate(180deg);
+        display: inline-block;
+        position: absolute;
+        --mask: 
+            conic-gradient(red 10%, transparent 0%);
+        -webkit-mask: var(--mask);
+            mask: var(--mask)
+    }
+
     .inner {
       height: 152px;
       width:  152px;
@@ -250,8 +284,8 @@
     <div style="position: relative; min-width: 280px; min-height: 280px;">
         <div class="colorDisplay"></div>
         <div class="orangeDisplay"></div>
-        <div class="coverRed"></div>
-        <div class="coverGreen"></div>
+        <div class="coverRedLLR"></div>
+        <div class="coverGreenLLR"></div>
         <div style="--rotation: 0deg" class="bigMarker"></div>
         <div style="--rotation: 68deg" class="bigMarker"></div>
         <div style="--rotation: 136deg" class="bigMarker"></div>
