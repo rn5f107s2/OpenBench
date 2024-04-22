@@ -61,6 +61,18 @@
       --llrAlignment: 105px;
     }
 
+    .speedometer {
+      text-align: center;
+    }
+
+    @media screen and (max-width: 767px) {
+      .speedometer {
+        margin-top: 25px;
+        margin-left: calc(50vw - 133px);
+        text-align: left;
+      }
+    }
+
     .orangeDisplay {
       width: 150px;
       height: 150px;
@@ -279,7 +291,7 @@
     }
 </script>
 
-<div style="text-align: center;">
+<div class="speedometer">
     <div style="position: relative; min-width: 280px; min-height: 280px;">
         <div class="colorDisplay"></div>
         <div class="orangeDisplay"></div>
