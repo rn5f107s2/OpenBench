@@ -127,27 +127,34 @@ def tinyStatBlock(test):
 
     return eloStr
 
+def llrBlock(test):
+    return twoDigitPrecision(test.currentllr)
+
 
 def speedometerStats(test):
     maxElo = 10
     minElo = -maxElo
 
-    # Note the actual max this value can be is 144, 142 is just for style
-    maxRotation = 142
+    # Note the actual limit of this value is 144, 142 is just for style
+    rotationLimit = 142
+    # The rotation that corresponds to maxElo
+    maxRotation   = 136
 
     lines = []
 
     lower, elo, upper = OpenBench.stats.ELO([test.losses, test.draws, test.wins])
 
+    # For minElo != - maxElo
     if elo == 0:
         lines.append("0")
     elif elo > 0:
         percentage = min(elo, maxElo) / maxElo
-        lines.append(str(percentage * maxRotation))
+        lines.append(str(min(percentage * maxRotation, rotationLimit)))
     else :
         percentage = abs(max(elo, minElo) / minElo)
-        lines.append(str(percentage * -maxRotation))
+        lines.append(str(max(percentage * -maxRotation, -rotationLimit)))
 
+    # should work for minElo = -maxElo
     # percentage = (min(max(elo, minElo), maxElo) / maxElo) * maxRotation
     # lines.append(str(percentage))
 
@@ -160,6 +167,18 @@ def speedometerStats(test):
 
     lines.append(str(round(min(lowerPc + 0.5, 0.9) * 100)))
     lines.append(str(round(min(0.5 - upperPc, 0.9) * 100)))
+
+    llr = test.currentllr
+
+    # llr limits are assymetric for most people
+    if llr == 0:
+        lines.append("0")
+    elif llr > 0:
+        percentage = llr / test.upperllr
+        lines.append(str(min(percentage * maxRotation, rotationLimit)))
+    else :
+        percentage = abs(llr) / test.lowerllr
+        lines.append(str(max(percentage * -maxRotation), -rotationLimit))
 
     return '\n'.join(lines)
 
@@ -258,6 +277,7 @@ register.filter('gitDiffLink', gitDiffLink)
 register.filter('shortStatBlock', shortStatBlock)
 register.filter('longStatBlock', longStatBlock)
 register.filter('tinyStatBlock', tinyStatBlock)
+register.filter('llrBlock', llrBlock)
 register.filter('speedometerStats', speedometerStats)
 register.filter('testResultColour', testResultColour)
 register.filter('sumAttributes', sumAttributes)
