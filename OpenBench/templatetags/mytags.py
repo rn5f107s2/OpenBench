@@ -143,7 +143,7 @@ def speedometerStats(test):
     # (note: while having minElo = -maxElo feels natural, its not strictly necessary, 
     # when considering this, keep in mind that zero will always be in the middle, 
     # so either value set to zero will lead to weird behaviour, 
-    # having min and max be the same sign might also lead  to weird behaviour), default -maxElo
+    # having min and max be the same sign might also lead to weird behaviour), default -maxElo
     # , default -maxElo
     minElo = -maxElo
 
