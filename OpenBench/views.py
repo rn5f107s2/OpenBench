@@ -554,6 +554,9 @@ def create_tune(request):
 def create_datagen(request):
     return create_workload(request, 'DATAGEN')
 
+def create_net_tune(request):
+    return create_workload(request, 'NET_TUNE')
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                          NETWORK MANAGEMENT VIEWS                           #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

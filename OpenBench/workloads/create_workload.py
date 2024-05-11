@@ -40,7 +40,7 @@ from OpenBench.workloads.verify_workload import verify_workload
 
 def create_workload(request, workload_type):
 
-    assert workload_type in [ 'TEST', 'TUNE', 'DATAGEN' ]
+    assert workload_type in [ 'TEST', 'TUNE', 'DATAGEN', 'NET_TUNE' ]
 
     if not request.user.is_authenticated:
         return OpenBench.views.redirect(request, '/login/', error='Only enabled users can create tests')
@@ -73,6 +73,14 @@ def create_workload(request, workload_type):
             data['submit_text']     = 'Create Datagen'
             data['submit_endpoint'] = '/newDatagen/'
 
+        if workload_type == 'NET_TUNE':
+            data['workload']        = workload_type
+            data['dev_text']        = ''
+            data['dev_title_text']  = 'Engine'
+            data['submit_text']     = 'Create Net Tune'
+            data['submit_endpoint'] = '/newNetTune/'
+
+
         return OpenBench.views.render(request, 'create_workload.html', data)
 
     if workload_type == 'TEST':
@@ -84,8 +92,11 @@ def create_workload(request, workload_type):
     elif workload_type == 'DATAGEN':
         workload, errors = create_new_datagen(request)
 
+    elif workload_type == 'NET_TUNE':
+        workload, errors = create_new_tune(request, True)
+
     if errors != [] and errors != None:
-        paths = { 'TEST' : '/newTest/', 'TUNE' : '/newTune/', 'DATAGEN' : '/newDatagen/' }
+        paths = { 'TEST' : '/newTest/', 'TUNE' : '/newTune/', 'DATAGEN' : '/newDatagen/', 'NET_TUNE' : '/newNetTune/' }
         return OpenBench.views.redirect(request, paths[workload_type], error='\n'.join(errors))
 
     if warning := OpenBench.utils.branch_is_out_of_date(workload):
@@ -167,14 +178,18 @@ def create_new_test(request):
 
     return test, None
 
-def create_new_tune(request):
+def create_new_tune(request, netTune = False):
 
     # Collects erros, and collects all data from the Github API
-    errors, engine_info = verify_workload(request, 'TUNE')
+    print(netTune)
+
+    errors, engine_info = verify_workload(request, 'TUNE' if not netTune else 'NET_TUNE')
     dev_info, dev_has_all = engine_info
 
     if errors:
         return None, errors
+
+
 
     test                  = Test()
     test.author           = request.user.username
@@ -198,9 +213,12 @@ def create_new_tune(request):
     test.draw_adj         = request.POST['draw_adj']
 
     test.test_mode        = 'SPSA'
-    test.spsa             = extract_spas_params(request)
+    test.spsa             = extract_spas_params(request, netTune)
 
     test.awaiting         = not dev_has_all
+
+    if netTune:
+        test.upperllr = 72
 
     if test.dev_network:
         name = Network.objects.get(engine=test.dev_engine, sha256=test.dev_network).name
@@ -276,7 +294,7 @@ def create_new_datagen(request):
 
     return test, None
 
-def extract_spas_params(request):
+def extract_spas_params(request, netTune):
 
     spsa = {} # SPSA Hyperparams
     spsa['Alpha'  ] = float(request.POST['spsa_alpha'])
@@ -293,33 +311,57 @@ def extract_spas_params(request):
     spsa['distribution_type'] = request.POST['spsa_distribution_type']
 
     # Each individual tuning parameter
+    print(netTune)
     spsa['parameters'] = {}
-    for index, line in enumerate(request.POST['spsa_inputs'].split('\n')):
+    if not netTune:
+        for index, line in enumerate(request.POST['spsa_inputs'].split('\n')):
 
-        # Comma-seperated values, already verified in verify_workload()
-        name, data_type, value, minimum, maximum, c_end, r_end = line.split(',')
+            # Comma-seperated values, already verified in verify_workload()
+            name, data_type, value, minimum, maximum, c_end, r_end = line.split(',')
 
-        # Recall the original order of inputs
-        param          = {}
-        param['index'] = index
+            # Recall the original order of inputs
+            param          = {}
+            param['index'] = index
 
-        # Raw extraction
-        param['float'] = data_type.strip() == 'float'
-        param['start'] = float(value)
-        param['value'] = float(value)
-        param['min'  ] = float(minimum)
-        param['max'  ] = float(maximum)
-        param['c_end'] = float(c_end)
-        param['r_end'] = float(r_end)
+            # Raw extraction
+            param['float'] = data_type.strip() == 'float'
+            param['start'] = float(value)
+            param['value'] = float(value)
+            param['min'  ] = float(minimum)
+            param['max'  ] = float(maximum)
+            param['c_end'] = float(c_end)
+            param['r_end'] = float(r_end)
 
-        # Verbatim Fishtest logic for computing these
-        param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
-        param['a_end'] = param['r_end'] * param['c_end'] ** 2
-        param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
+            # Verbatim Fishtest logic for computing these
+            param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
+            param['a_end'] = param['r_end'] * param['c_end'] ** 2
+            param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
 
-        spsa['parameters'][name] = param
+            spsa['parameters'][name] = param
+    else:
+            # Recall the original order of inputs
+            param          = {}
+            param['index'] = 0
+
+            # Raw extraction
+            param['float'] = False
+            param['start'] = float(1)
+            param['value'] = float(1)
+            param['min'  ] = float(0)
+            param['max'  ] = float(2)
+            param['c_end'] = float(12)
+            param['r_end'] = float(0.3)
+
+            # Verbatim Fishtest logic for computing these
+            param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
+            param['a_end'] = param['r_end'] * param['c_end'] ** 2
+            param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
+
+            spsa['parameters']['foo'] = param
+
 
     return spsa
+
 
 def get_engine(source, name, sha, bench):
 

@@ -98,7 +98,7 @@
                         <label for="base_time_control" > Base Time </label> <input id="base_time_control" name="base_time_control">
                     </div>
 
-                {% elif workload == "TUNE" %}
+                {% elif workload == "TUNE" or workload == "NET_TUNE" %}
 
                     <h3> SPSA Methodologies </h3>
 
@@ -118,11 +118,16 @@
                         </select>
                     </div>
 
-                    <h3> SPSA Input </h3>
+                    {% if workload == "TUNE" %}
 
-                    <div class="row">
-                        <textarea style="margin-left:24px" id="spsa_inputs" name="spsa_inputs" rows=9></textarea>
-                    </div>
+                        <h3> SPSA Input </h3>
+
+                        <div class="row">
+                            <textarea style="margin-left:24px" id="spsa_inputs" name="spsa_inputs" rows=9></textarea>
+                        </div>
+                        
+                    {% endif %}
+
 
                 {% endif %}
 
@@ -154,7 +159,7 @@
                         <label for="test_max_games"> Max Games </label> <input id="test_max_games" name="test_max_games">
                     </div>
 
-                {% elif workload == "TUNE" %}
+                {% elif workload == "TUNE" or workload == "NET_TUNE" %}
 
                     <h3> SPSA Settings </h3>
 
