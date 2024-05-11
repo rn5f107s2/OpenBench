@@ -136,7 +136,7 @@
         {% endif %}
 
         <!-- Copies Raw SPSA Input from a hidden element -->
-        {% if type == "TUNE" %}
+        {% if type == "TUNE" and workload.upperllr != 72 %}
             <div class="anchor-container">
                 <pre id="spsa-input" style="display: none">{{workload|spsa_original_input}}</pre>
                 <a class="mt-1 anchorbutton btn-blue" onclick="copy_text('spsa-input', false)">Copy SPSA Inputs</a>
@@ -144,12 +144,20 @@
         {% endif %}
 
         <!-- Copies SPSA Optimal Values from a hidden element -->
-        {% if type == "TUNE" %}
+        {% if type == "TUNE" and workload.upperllr != 72 %}
             <div class="anchor-container">
                 <pre id="spsa-output" style="display: none">{{workload|spsa_optimal_values}}</pre>
                 <a class="mt-1 anchorbutton btn-blue" onclick="copy_text('spsa-output', false)">Copy SPSA Outputs</a>
             </div>
         {% endif %}
+
+        {% if type == "TUNE" and workload.upperllr == 72 %}
+            <div class="anchor-container">
+                <pre id="spsa-output" style="display: none">{{workload|spsa_optimal_values}}</pre>
+                <a class="mt-1 anchorbutton btn-blue" onclick="copy_text('spsa-output', false)">Download Current Net</a>
+            </div>
+        {% endif %}
+
 
         <!-- Elo, (SPRT/LRR if SPRT, otherwise CONF), Games -->
         {% if type == "TEST" %}
@@ -195,7 +203,7 @@
     </div>
 
     <!-- SPSA Paramater Summary, for Tunes -->
-    {% if type == "TUNE" %}
+    {% if type == "TUNE" and workload.upperllr != 72 %}
         <div id="parameters" class="w-100 mt-3" style="float:left;">
             <table class="stripes wrappable">
 

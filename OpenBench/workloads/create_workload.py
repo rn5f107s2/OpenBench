@@ -339,9 +339,10 @@ def extract_spas_params(request, netTune):
 
             spsa['parameters'][name] = param
     else:
+        for i in range(0, 19):
             # Recall the original order of inputs
             param          = {}
-            param['index'] = 0
+            param['index'] = i
 
             # Raw extraction
             param['float'] = False
@@ -357,7 +358,9 @@ def extract_spas_params(request, netTune):
             param['a_end'] = param['r_end'] * param['c_end'] ** 2
             param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
 
-            spsa['parameters']['foo'] = param
+            n = 'foo' + str(i)
+
+            spsa['parameters'][n] = param
 
 
     return spsa
