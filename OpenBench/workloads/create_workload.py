@@ -313,7 +313,6 @@ def extract_spas_params(request, netTune, netSHA):
     spsa['distribution_type'] = request.POST['spsa_distribution_type']
 
     # Each individual tuning parameter
-    print(netTune)
     spsa['parameters'] = {}
     if not netTune:
         for index, line in enumerate(request.POST['spsa_inputs'].split('\n')):
@@ -349,38 +348,54 @@ def extract_spas_params(request, netTune, netSHA):
         ar  = [0, weights1end, bias1end, weights2end, bias2end]
         max = [504, 504, 126, 32313]
 
+        if not netSHA:
+            netSHA = "foo"
+
         netFile = "Media/" + netSHA
 
-        with open(netFile, 'rb') as f:
-            for i in range(0, 4):
-                for j in range(ar[i], ar[i + 1]):
+        f = None
+        exists = True
+
+        try:
+            f = open(netFile, 'rb')
+        except FileNotFoundError:
+            exists = False
+        
+        for i in range(0, 4):
+            for j in range(ar[i], ar[i + 1]):
+                w = None
+
+                if exists:
                     w = f.read(2)
 
-                    value = 0
+                value = 0
 
-                    if w:
-                        value = struct.unpack('<h', w)[0]
+                if w:
+                    value = struct.unpack('<h', w)[0]
 
-                    param          = {}
-                    param['index'] = j
+                param          = {}
+                param['index'] = j
 
-                    c = max[i] / 20
+                c = max[i] / 20
 
-                    # Raw extraction
-                    param['float'] = False
-                    param['start'] = float(value)
-                    param['value'] = float(value)
-                    param['min'  ] = float(-max[i])
-                    param['max'  ] = float( max[i])
-                    param['c_end'] = float(c)
-                    param['r_end'] = float(0.0020)
+                # Raw extraction
+                param['float'] = False
+                param['start'] = float(value)
+                param['value'] = float(value)
+                param['min'  ] = float(-max[i])
+                param['max'  ] = float( max[i])
+                param['c_end'] = float(c)
+                param['r_end'] = float(0.0020)
 
-                    # Verbatim Fishtest logic for computing these
-                    param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
-                    param['a_end'] = param['r_end'] * param['c_end'] ** 2
-                    param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
+                # Verbatim Fishtest logic for computing these
+                param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
+                param['a_end'] = param['r_end'] * param['c_end'] ** 2
+                param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
 
-                    spsa['parameters'][str(j)] = param
+                spsa['parameters'][str(j)] = param
+
+        if exists:
+            f.close()
 
 
     return spsa

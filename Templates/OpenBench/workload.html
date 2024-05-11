@@ -154,7 +154,7 @@
         {% if type == "TUNE" and workload.upperllr == 72 %}
             <div class="anchor-container">
                 <pre id="spsa-output" style="display: none">{{workload|spsa_optimal_values}}</pre>
-                <a class="mt-1 anchorbutton btn-blue" onclick="copy_text('spsa-output', false)">Download Current Net</a>
+                <a class="mt-1 anchorbutton btn-blue" href="/netTune/DOWNLOAD/{{workload.id}}">Download Current Net</a>
             </div>
         {% endif %}
 

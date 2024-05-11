@@ -18,7 +18,7 @@
 #                                                                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-import os, hashlib, datetime, json, secrets, sys, re
+import os, hashlib, datetime, json, secrets, sys, re, io
 
 import django.http
 import django.shortcuts
@@ -57,6 +57,8 @@ from googleapiclient.discovery import build
 import socket
 
 import tempfile
+
+import struct
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                              GENERAL UTILITIES                              #
@@ -610,6 +612,34 @@ def network_form(request):
     # Get requests should not be reaching this point
     if request.method == 'GET':
         return render(request, 'uploadnet.html', {})
+
+def download_tuned_net(request, id):
+
+    print("hit")
+
+    buffer   = io.BytesIO()
+    workload = Test.objects.filter(id=id).first()
+
+    keys = sorted(
+        workload.spsa['parameters'].keys(),
+        key=lambda x: workload.spsa['parameters'][x].get('index', -1)
+    )
+
+    for name in keys:
+        packed = struct.pack('<h', int(workload.spsa['parameters'][name]['value']))
+        buffer.write(packed)   
+
+    buffer.seek(0)
+
+    response  = FileResponse(buffer, content_type='application/octet-stream')
+    prefix    = workload.dev_network if workload.dev_network else "emptyNet"
+    iteration = str(int(1 + (workload.games / (workload.spsa['pairs_per'] * 2))))
+    name      = prefix + '_iteration_' + iteration + '.nnue'
+
+    # Set all headers and return response
+    response['Content-Length'] = buffer.getbuffer().nbytes
+    response['Content-Disposition'] = 'attachment; filename=' + name
+    return response
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                             OPENBENCH SCRIPTING                             #
