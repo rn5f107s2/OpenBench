@@ -38,6 +38,8 @@ from OpenBench.models import *
 from OpenBench.config import OPENBENCH_CONFIG
 from OpenBench.workloads.verify_workload import verify_workload
 
+import struct
+
 def create_workload(request, workload_type):
 
     assert workload_type in [ 'TEST', 'TUNE', 'DATAGEN', 'NET_TUNE' ]
@@ -213,7 +215,7 @@ def create_new_tune(request, netTune = False):
     test.draw_adj         = request.POST['draw_adj']
 
     test.test_mode        = 'SPSA'
-    test.spsa             = extract_spas_params(request, netTune)
+    test.spsa             = extract_spas_params(request, netTune, test.dev_network)
 
     test.awaiting         = not dev_has_all
 
@@ -294,7 +296,7 @@ def create_new_datagen(request):
 
     return test, None
 
-def extract_spas_params(request, netTune):
+def extract_spas_params(request, netTune, netSHA):
 
     spsa = {} # SPSA Hyperparams
     spsa['Alpha'  ] = float(request.POST['spsa_alpha'])
@@ -339,28 +341,46 @@ def extract_spas_params(request, netTune):
 
             spsa['parameters'][name] = param
     else:
-        for i in range(0, 19):
-            # Recall the original order of inputs
-            param          = {}
-            param['index'] = i
+        weights1end = 768 * 256
+        bias1end    = weights1end + 256
+        weights2end = bias1end + 256 * 2
+        bias2end    = weights2end + 1
 
-            # Raw extraction
-            param['float'] = False
-            param['start'] = float(1)
-            param['value'] = float(1)
-            param['min'  ] = float(0)
-            param['max'  ] = float(2)
-            param['c_end'] = float(12)
-            param['r_end'] = float(0.3)
+        ar  = [0, weights1end, bias1end, weights2end, bias2end]
+        max = [504, 504, 126, 32313]
 
-            # Verbatim Fishtest logic for computing these
-            param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
-            param['a_end'] = param['r_end'] * param['c_end'] ** 2
-            param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
+        netFile = "Media/" + netSHA
 
-            n = 'foo' + str(i)
+        with open(netFile, 'rb') as f:
+            for i in range(0, 4):
+                for j in range(ar[i], ar[i + 1]):
+                    w = f.read(2)
 
-            spsa['parameters'][n] = param
+                    value = 0
+
+                    if w:
+                        value = struct.unpack('<h', w)[0]
+
+                    param          = {}
+                    param['index'] = j
+
+                    c = max[i] / 20
+
+                    # Raw extraction
+                    param['float'] = False
+                    param['start'] = float(value)
+                    param['value'] = float(value)
+                    param['min'  ] = float(-max[i])
+                    param['max'  ] = float( max[i])
+                    param['c_end'] = float(c)
+                    param['r_end'] = float(0.0020)
+
+                    # Verbatim Fishtest logic for computing these
+                    param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
+                    param['a_end'] = param['r_end'] * param['c_end'] ** 2
+                    param['a']     = param['a_end'] * (spsa['A'] + spsa['iterations']) ** spsa['Alpha']
+
+                    spsa['parameters'][str(j)] = param
 
 
     return spsa
