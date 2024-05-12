@@ -35,6 +35,7 @@ import time
 import traceback
 import uuid
 import zipfile
+import struct
 
 from subprocess import PIPE, Popen, call, STDOUT
 from itertools import combinations_with_replacement
@@ -470,9 +471,24 @@ class Cutechess:
             options += ' SyzygyProbeLimit=%s' % (syzygy.split('-')[0])
 
         # Add any of the custom SPSA settings
+        #if config.workload['test']['type'] == 'SPSA' and not config.workload.upperllr == 72:
+        #    for param, data in config.workload['spsa'].items():
+        #        options += ' %s=%s' % (param, str(data[branch][cutechess_idx]))
+
         if config.workload['test']['type'] == 'SPSA':
-            for param, data in config.workload['spsa'].items():
-                options += ' %s=%s' % (param, str(data[branch][cutechess_idx]))
+            name = str('config.workload[\'id\']') + '_' + str(branch)
+            path = 'Netorks/' + name
+
+            os.chdir('Networks/')
+
+            with open(name, 'wb') as f:
+                for param, data in config.workload['spsa'].items():
+                    packed = struct.pack('<h', int(data[branch][cutechess_idx]))
+                    f.write(packed)
+
+            os.chdir('..')
+            options += ' EvalFile=%s' % path
+                    
 
         # Join options together in the Cutechess format
         options = ' option.'.join([''] + re.findall(r'"[^"]*"|\S+', options))
