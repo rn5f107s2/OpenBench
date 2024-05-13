@@ -61,6 +61,22 @@
                 <tr><td class="td-label">Play Reverses</td><td>{{workload.play_reverses}}</td></tr>
             {% endif %}
 
+            {% if type == "TUNE" and workload.upperllr == 72 %}
+                <tr><td class="td-label">HL Size</td><td>{{workload.spsa.hl_size}}</td></tr>
+                <tr><td class="td-label">In Weight Max</td><td>{{workload.spsa.input_weight_maximum}}</td></tr>
+                <tr><td class="td-label">In Weight C</td><td>{{workload.spsa.input_weight_c}}</td></tr>
+                <tr><td class="td-label">In Weight R</td><td>{{workload.spsa.input_weight_r}}</td></tr>
+                <tr><td class="td-label">HL Bias Max</td><td>{{workload.spsa.hl_bias_max}}</td></tr>
+                <tr><td class="td-label">HL Bias C</td><td>{{workload.spsa.hl_bias_c}}</td></tr>
+                <tr><td class="td-label">HL Bias R</td><td>{{workload.spsa.hl_bias_r}}</td></tr>
+                <tr><td class="td-label">Out Weight Max</td><td>{{workload.spsa.output_weight_maximum}}</td></tr>
+                <tr><td class="td-label">Out Weight C</td><td>{{workload.spsa.output_weight_c}}</td></tr>
+                <tr><td class="td-label">Out Weight R</td><td>{{workload.spsa.output_weight_r}}</td></tr>
+                <tr><td class="td-label">Out Bias Max</td><td>{{workload.spsa.out_bias_max}}</td></tr>
+                <tr><td class="td-label">Out Bias C</td><td>{{workload.spsa.out_bias_c}}</td></tr>
+                <tr><td class="td-label">Out Bias R</td><td>{{workload.spsa.out_bias_r}}</td></tr>
+            {% endif %}
+
         </table>
     </div>
 

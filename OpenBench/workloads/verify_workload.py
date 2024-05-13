@@ -52,9 +52,6 @@ def verify_workload(request, workload_type):
 
     errors = []
 
-    print("HERE")
-    print(workload_type)
-
     if workload_type == 'TEST':
         verify_test_creation(errors, request)
         dev  = collect_github_info(errors, request, 'dev')
@@ -166,8 +163,6 @@ def verify_tune_creation(errors, request, netTune = False):
         (verify_greater_than          , 'spsa_iterations', 'SPSA Iterations', 0),
         (verify_greater_than          , 'spsa_pairs_per', 'SPSA Pairs-Per', 0),
     ]
-
-    print("HIT")
 
     if not netTune:
         verifications.append((verify_spsa_inputs, 'spsa_inputs'))

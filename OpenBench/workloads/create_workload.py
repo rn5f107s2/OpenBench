@@ -183,14 +183,12 @@ def create_new_test(request):
 def create_new_tune(request, netTune = False):
 
     # Collects erros, and collects all data from the Github API
-    
+
     errors, engine_info = verify_workload(request, 'TUNE' if not netTune else 'NET_TUNE')
     dev_info, dev_has_all = engine_info
 
     if errors:
         return None, errors
-
-
 
     test                  = Test()
     test.author           = request.user.username
@@ -339,14 +337,45 @@ def extract_spas_params(request, netTune, netSHA):
 
             spsa['parameters'][name] = param
     else:
-        weights1end = 768 * 256
-        bias1end    = weights1end + 256
-        weights2end = bias1end + 256 * 2
+        hlSize = int(request.POST['hidden_layer_size'])
+
+        spsa['hl_size'] = hlSize
+
+        weights1end = 768 * hlSize
+        bias1end    = weights1end + hlSize
+        weights2end = bias1end + hlSize * 2
         bias2end    = weights2end + 1
 
+        spsa['input_weight_maximum']  = request.POST['input_weight_maximum']
+        spsa['hl_bias_max']           = request.POST['hl_bias_max']
+        spsa['output_weight_maximum'] = request.POST['output_weight_maximum'] 
+        spsa['out_bias_max']          = request.POST['out_bias_max'] 
+
+        spsa['input_weight_c']  = request.POST['input_weight_c']
+        spsa['hl_bias_c']       = request.POST['hl_bias_c']
+        spsa['output_weight_c'] = request.POST['output_weight_c'] 
+        spsa['out_bias_c']      = request.POST['out_bias_c'] 
+
+        spsa['input_weight_r']  = request.POST['input_weight_r']
+        spsa['hl_bias_r']       = request.POST['hl_bias_r']
+        spsa['output_weight_r'] = request.POST['output_weight_r'] 
+        spsa['out_bias_r']      = request.POST['out_bias_r'] 
+
         ar  = [0, weights1end, bias1end, weights2end, bias2end]
-        max = [504, 504, 126, 32313]
-        cs  = [  4,   4,   2,   128]
+        max = [request.POST['input_weight_maximum'], 
+               request.POST['hl_bias_max'], 
+               request.POST['output_weight_maximum'], 
+               request.POST['out_bias_max']]
+
+        c  = [request.POST['input_weight_c'], 
+              request.POST['hl_bias_c'], 
+              request.POST['output_weight_c'], 
+              request.POST['out_bias_c']]
+
+        r = [request.POST['input_weight_r'], 
+             request.POST['hl_bias_r'], 
+             request.POST['output_weight_r'], 
+             request.POST['out_bias_r']]
 
         if not netSHA:
             netSHA = "foo"
@@ -376,16 +405,14 @@ def extract_spas_params(request, netTune, netSHA):
                 param          = {}
                 param['index'] = j
 
-                c = max[i] / 20
-
                 # Raw extraction
                 param['float'] = False
-                param['start'] = float(value)
-                param['value'] = float(value)
-                param['min'  ] = float(-max[i])
-                param['max'  ] = float( max[i])
-                param['c_end'] = float(cs[i])
-                param['r_end'] = float(0.0020)
+                param['start'] =  float(value)
+                param['value'] =  float(value)
+                param['min'  ] = -float( max[i])
+                param['max'  ] =  float( max[i])
+                param['c_end'] =  float(   c[i])
+                param['r_end'] =  float(   r[i])
 
                 # Verbatim Fishtest logic for computing these
                 param['c']     = param['c_end'] * spsa['iterations'] ** spsa['Gamma']
