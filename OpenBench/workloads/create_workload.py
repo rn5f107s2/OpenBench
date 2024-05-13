@@ -183,8 +183,7 @@ def create_new_test(request):
 def create_new_tune(request, netTune = False):
 
     # Collects erros, and collects all data from the Github API
-    print(netTune)
-
+    
     errors, engine_info = verify_workload(request, 'TUNE' if not netTune else 'NET_TUNE')
     dev_info, dev_has_all = engine_info
 
@@ -347,6 +346,7 @@ def extract_spas_params(request, netTune, netSHA):
 
         ar  = [0, weights1end, bias1end, weights2end, bias2end]
         max = [504, 504, 126, 32313]
+        cs  = [  4,   4,   2,   128]
 
         if not netSHA:
             netSHA = "foo"
@@ -384,7 +384,7 @@ def extract_spas_params(request, netTune, netSHA):
                 param['value'] = float(value)
                 param['min'  ] = float(-max[i])
                 param['max'  ] = float( max[i])
-                param['c_end'] = float(c)
+                param['c_end'] = float(cs[i])
                 param['r_end'] = float(0.0020)
 
                 # Verbatim Fishtest logic for computing these

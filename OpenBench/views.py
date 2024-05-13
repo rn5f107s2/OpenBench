@@ -615,8 +615,6 @@ def network_form(request):
 
 def download_tuned_net(request, id):
 
-    print("hit")
-
     buffer   = io.BytesIO()
     workload = Test.objects.filter(id=id).first()
 
@@ -632,7 +630,7 @@ def download_tuned_net(request, id):
     buffer.seek(0)
 
     response  = FileResponse(buffer, content_type='application/octet-stream')
-    prefix    = workload.dev_network if workload.dev_networkx else "emptyNet"
+    prefix    = workload.dev_network if workload.dev_network else "emptyNet"
     iteration = str(int(1 + (workload.games / (workload.spsa['pairs_per'] * 2))))
     name      = prefix + '_iteration_' + iteration + '.nnue'
 
@@ -668,7 +666,6 @@ def verify_worker(function):
 
         # Get the machine, assuming it exists
         machineId = int(args[0].POST['machine_id'])
-        print(machineId)
         try: machine = Machine.objects.get(id=machineId)
         except: return JsonResponse({ 'error' : 'Bad Machine Id' })
 
@@ -799,8 +796,6 @@ def client_bench_error(request, machine):
 @verify_worker
 def client_submit_nps(request, machine):
 
-    print("NPS_SUBMIT")
-
     # Update the NPS counters for the GUI views
     machine.mnps      = float(request.POST['nps'     ]) / 1e6;
     machine.dev_mnps  = float(request.POST['dev_nps' ]) / 1e6;
@@ -837,8 +832,6 @@ def client_submit_error(request, machine):
 @csrf_exempt
 @verify_worker
 def client_submit_results(request, machine):
-
-    print("RESULTS")
 
     # Returns {}, or { 'stop' : True }
     return JsonResponse(OpenBench.utils.update_test(request, machine))

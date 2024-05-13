@@ -55,7 +55,7 @@ from genfens import create_genfens_opening_book
 
 ## Basic configuration of the Client. These timeouts can be changed at will
 
-CLIENT_VERSION   = 27 # Client version to send to the Server
+CLIENT_VERSION   = 28 # Client version to send to the Server
 TIMEOUT_HTTP     = 30 # Timeout in seconds for HTTP requests
 TIMEOUT_ERROR    = 10 # Timeout in seconds when any errors are thrown
 TIMEOUT_WORKLOAD = 30 # Timeout in seconds between workload requests
@@ -231,20 +231,13 @@ class ServerReporter:
         target   = url_join(config.server, endpoint)
         response = requests.post(target, data=payload, files=files, timeout=TIMEOUT_HTTP)
 
-        print(payload)
-
         # Check for a json repsone, to look for Client Version Errors
         try: as_json = response.json()
         except: return response
 
-        print("TRY SUCESS")
-
         # Throw all the way back to the client.py
         if 'Bad Client Version' in as_json.get('error', ''):
             raise BadVersionException()
-
-        print(response.json())
-        print("RESPONSE RETURNED")
 
         return response
 
@@ -478,12 +471,12 @@ class Cutechess:
             options += ' SyzygyProbeLimit=%s' % (syzygy.split('-')[0])
 
         # Add any of the custom SPSA settings
-        #if config.workload['test']['type'] == 'SPSA' and not config.workload.upperllr == 72:
-        #    for param, data in config.workload['spsa'].items():
-        #        options += ' %s=%s' % (param, str(data[branch][cutechess_idx]))
+        if config.workload['test']['type'] == 'SPSA' and not config.workload['netTune']:
+            for param, data in config.workload['spsa'].items():
+                options += ' %s=%s' % (param, str(data[branch][cutechess_idx]))
 
-        if config.workload['test']['type'] == 'SPSA':
-            name = str('config.workload[\'id\']') + '_' + str(branch)
+        if config.workload['test']['type'] == 'SPSA' and config.workload['netTune'] :
+            name = str(config.workload['test']['id']) + '_' + str(branch) + '.nnue'
             path = 'Netorks/' + name
 
             os.chdir('Networks/')
