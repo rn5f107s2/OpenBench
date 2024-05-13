@@ -413,6 +413,8 @@ def update_test(request, machine):
     losses, draws, wins = map(int, request.POST['trinomial'].split())
     games = losses + draws + wins
 
+    print(games)
+
     # Pentanomial Implementation
     LL, LD, DD, DW, WW = map(int, request.POST['pentanomial'].split())
 

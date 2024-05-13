@@ -231,13 +231,20 @@ class ServerReporter:
         target   = url_join(config.server, endpoint)
         response = requests.post(target, data=payload, files=files, timeout=TIMEOUT_HTTP)
 
+        print(payload)
+
         # Check for a json repsone, to look for Client Version Errors
         try: as_json = response.json()
         except: return response
 
+        print("TRY SUCESS")
+
         # Throw all the way back to the client.py
         if 'Bad Client Version' in as_json.get('error', ''):
             raise BadVersionException()
+
+        print(response.json())
+        print("RESPONSE RETURNED")
 
         return response
 
@@ -338,7 +345,7 @@ class ServerReporter:
         payload['trinomial'  ] = ' '.join(map(str, payload['trinomial'  ]))
         payload['pentanomial'] = ' '.join(map(str, payload['pentanomial']))
 
-        print (payload)
+        #print (payload)
 
         return ServerReporter.report(config, 'clientSubmitResults', payload)
 
@@ -487,7 +494,7 @@ class Cutechess:
                     f.write(packed)
 
             os.chdir('..')
-            options += ' EvalFile=%s' % path
+            options += ' EvalFile=%s' % (os.path.join('../Networks', name))
                     
 
         # Join options together in the Cutechess format
