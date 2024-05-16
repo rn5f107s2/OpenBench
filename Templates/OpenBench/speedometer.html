@@ -421,11 +421,13 @@
           var b = document.querySelector('body');
           var c = document.getElementById("colors").innerHTML;
 
-          var ar = c.split("\n");
+          var ar = c.split("<br>");
           
-          for (let i = 0; i < 3; i++) {
-             b.style.setProperty('--color'      + i, "#" + ar[i    ]);
-             b.style.setProperty('--color-font' + i, "#" + ar[i + 3]);
+          for (let i = 1; i < 4; i++) {
+             b.style.setProperty('--color'      + i, "#" + ar[i - 1]);
+             b.style.setProperty('--color-font' + i, "#" + ar[i + 2]);
+             console.log(ar[i    ]);
+             console.log(ar[i + 3]);
           }
       }
 
