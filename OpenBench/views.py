@@ -451,6 +451,26 @@ def speedometer(request, id, action=None):
 
     return view_speedometer(request, test, 'TEST')
 
+def stats(request, id, action=None): 
+    # Request is to modify or interact with the Test
+    if action != None:
+        return modify_workload(request, id, action)
+
+    # Verify that the Test id exists
+    if not (test := Test.objects.filter(id=id).first()):
+        return redirect(request, '/index/', error='No such Test exists')
+    
+    # Verify that it is indeed a Test and not a Tune
+    if test.test_mode != 'SPRT':
+        return redirect(request, '/index/', error='This test is not a SPRT')
+
+    data = {
+        'workload' : test,
+        'results'  : [],
+    }
+
+    return render(request, "test_stats.html", data)
+
 def events_actions(request, page=1):
 
     events = LogEvent.objects.all().filter(machine_id=0).order_by('-id')

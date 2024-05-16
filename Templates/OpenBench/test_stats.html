@@ -1,0 +1,5 @@
+{% load mytags %}
+
+<div id="speedometerStats">{{workload|speedometerStats}}</div>
+<div id="eloValue">{{workload|tinyStatBlock}}</div>
+<div id="llrValue">{{workload|llrBlock|linebreaksbr}}</div>
