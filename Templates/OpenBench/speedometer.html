@@ -255,46 +255,6 @@
 
 </style>
 
-<div class="workload-container" style="display: none;">
-    <pre class="speedometerStats" id="speedometerStats" style="display: none;">{{workload|speedometerStats}}</pre>
-</div>
-
-<script>
-    var r = document.querySelector(':root');
-
-    window.onload = function setSpeedometerStuff() {
-        var argsSingle = document.getElementById('speedometerStats').innerHTML;
-        var argsAr = argsSingle.split("\n");
-        
-        var eloNeedleRotation = argsAr[0] + "deg";
-        var llrNeedleRotation = argsAr[3] + "deg";
-        var lowerPercent = argsAr[1] + "%";
-        var upperPercent = argsAr[2] + "%";
-        var eloAlignment = "100px";
-        var llrAlignment = "100px"
-
-        if (argsAr[0] < 0) {
-          eloAlignment = "95px";
-        }
-
-        if (argsAr[3] < 0) {
-          llrAlignment = "95px";
-        }
-
-        r.style.setProperty('--eloNeedleRotation', eloNeedleRotation);
-        r.style.setProperty('--llrNeedleRotation', llrNeedleRotation);
-        r.style.setProperty('--lowerPercent', lowerPercent);
-        r.style.setProperty('--upperPercent', upperPercent);
-        r.style.setProperty('--eloAlignment', eloAlignment);
-        r.style.setProperty('--llrAlignment', llrAlignment);
-    }
-
-    setInterval(function(){
-        location.reload();
-    }, 30000)
-
-</script>
-
 <!-- This disables darkreader for the whole speedometer page, with darkreader this page looks cursed-->
 <meta name="darkreader-lock">
 
@@ -324,7 +284,7 @@
         <div class="inner"></div>
         <div class="displayOutline"></div>
         <div class="eloInscription">LLR</div>
-        <div class="llrValueInscription">{{workload|llrBlock|linebreaksbr}}</div>
+        <div class="llrValueInscription" id="llrValueInscription">{{workload|llrBlock|linebreaksbr}}</div>
         <div class="llrNeedle"></div>
         <div class="needleHolder"></div>
     </div>
@@ -353,10 +313,74 @@
       <div class="inner"></div>
       <div class="displayOutline"></div>
       <div class="eloInscription">Elo</div>
-      <div class="eloValueInscription">{{workload|tinyStatBlock|linebreaksbr}}</div>
+      <div class="eloValueInscription" id="eloValueInscription">{{workload|tinyStatBlock|linebreaksbr}}</div>
       <div class="eloNeedle"></div>
       <div class="needleHolder"></div>
   </div>
 </div>
+
+<div class="workload-container" style="display: none;">
+  <div class="all" id="all">
+    <div id="speedometerStats">{{workload|speedometerStats}}</div>
+    <div id="eloValue">{{workload|tinyStatBlock}}</div>
+    <div id="llrValue">{{workload|llrBlock|linebreaksbr}}</div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+  var r = document.querySelector(':root');
+
+  function updateSpeedometerStuff() {
+    $("#all").load('stats', function() {
+        setSpeedometerStuff();
+    });
+  }
+
+  function setSpeedometerStuff() {
+      var stats  = document.getElementById('speedometerStats').innerHTML;
+      var elo    = document.getElementById('eloValue').innerHTML;
+      var llr    = document.getElementById('llrValue').innerHTML;
+
+      console.log(elo);
+
+      document.getElementById("eloValueInscription").innerHTML = elo;
+      document.getElementById("llrValueInscription").innerHTML = llr;
+
+      var argsAr            = stats.split(' ');
+      var eloNeedleRotation = argsAr[0] + "deg";
+      var llrNeedleRotation = argsAr[3] + "deg";
+      var lowerPercent      = argsAr[1] + "%";
+      var upperPercent      = argsAr[2] + "%";
+      var eloAlignment      = "100px";
+      var llrAlignment      = "100px"
+
+      if (argsAr[0] < 0) {
+        eloAlignment = "95px";
+      }
+
+      if (argsAr[3] < 0) {
+        llrAlignment = "95px";
+      }
+
+      console.log(eloNeedleRotation);
+
+      r.style.setProperty('--eloNeedleRotation', eloNeedleRotation);
+      r.style.setProperty('--llrNeedleRotation', llrNeedleRotation);
+      r.style.setProperty('--lowerPercent', lowerPercent);
+      r.style.setProperty('--upperPercent', upperPercent);
+      r.style.setProperty('--eloAlignment', eloAlignment);
+      r.style.setProperty('--llrAlignment', llrAlignment);
+  }
+
+  window.onload = function foo() {
+      setSpeedometerStuff(); 
+  }
+
+  setInterval(function(){
+      updateSpeedometerStuff();
+  }, 30000)
+
+</script>
 
 {% endblock %}
