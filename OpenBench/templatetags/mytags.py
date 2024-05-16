@@ -195,7 +195,6 @@ def speedometerStats(test):
 
     return '\n'.join(lines)
 
-
 def testResultColour(test):
 
     if test.passed:
