@@ -287,8 +287,12 @@
         r.style.setProperty('--upperPercent', upperPercent);
         r.style.setProperty('--eloAlignment', eloAlignment);
         r.style.setProperty('--llrAlignment', llrAlignment);
-        var rs = getComputedStyle(r);
     }
+
+    setInterval(function(){
+        location.reload();
+    }, 30000)
+
 </script>
 
 <!-- This disables darkreader for the whole speedometer page, with darkreader this page looks cursed-->
